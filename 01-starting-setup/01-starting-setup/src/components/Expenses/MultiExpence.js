@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./MultiExpence.css";
-import ExpenseTtem from "./Expenseltem";
+
 import Card from "../UI/Card";
 import ExpensesFilter from "../NewExpense/ExpensesFilter";
+import Expenseslist from "./Expenseslist";
 
 const MultiExpence = (props) => {
   const [Year, setYear] = useState("2020");
@@ -11,20 +12,15 @@ const MultiExpence = (props) => {
     setYear(passedYear);
   };
 
+  const filterdExpenses = props.items.filter((expense) => {
+    return expense.date.getFullYear().toString() === Year;
+  });
+
   return (
     <div>
       <Card className="expenses">
         <ExpensesFilter onYearValue={YearValue}></ExpensesFilter>
-        {props.items
-          .filter((fexpense) => Year === fexpense.date.getFullYear().toString())
-          .map((expense) => (
-            <ExpenseTtem
-              key={expense.id}
-              title={expense.title}
-              amount={expense.amount}
-              date={expense.date}
-            ></ExpenseTtem>
-          ))}
+        <Expenseslist items={filterdExpenses}></Expenseslist>
       </Card>
     </div>
   );
