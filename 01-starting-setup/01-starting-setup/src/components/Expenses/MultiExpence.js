@@ -4,6 +4,7 @@ import "./MultiExpence.css";
 import Card from "../UI/Card";
 import ExpensesFilter from "../NewExpense/ExpensesFilter";
 import Expenseslist from "./Expenseslist";
+import ExpensesChart from "./ExpensesChart";
 
 const MultiExpence = (props) => {
   const [Year, setYear] = useState("2020");
@@ -20,6 +21,7 @@ const MultiExpence = (props) => {
     <div>
       <Card className="expenses">
         <ExpensesFilter onYearValue={YearValue}></ExpensesFilter>
+        <ExpensesChart expense={filterdExpenses}></ExpensesChart>
         <Expenseslist items={filterdExpenses}></Expenseslist>
       </Card>
     </div>
