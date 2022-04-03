@@ -7,7 +7,7 @@ import Expenseslist from "./Expenseslist";
 import ExpensesChart from "./ExpensesChart";
 
 const MultiExpence = (props) => {
-  const [Year, setYear] = useState("2020");
+  const [Year, setYear] = useState("2022");
 
   const YearValue = function (passedYear) {
     setYear(passedYear);
