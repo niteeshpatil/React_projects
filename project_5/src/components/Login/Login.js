@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useContext } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
+import AuthContext from "../../Store/auth-context";
 
 const emailReducer = (state, action) => {
   if (action.type === "User_Input")
@@ -50,6 +51,8 @@ const Login = (props) => {
     isValid: null,
   });
 
+  const authctx = useContext(AuthContext);
+
   // useEffect(() => {
   //   console.log("Effect Running");
 
@@ -63,12 +66,12 @@ const Login = (props) => {
 
   useEffect(() => {
     const idetifier = setTimeout(() => {
-      console.log("cheking form validity");
+      // console.log("cheking form validity");
       setFormIsValid(emailIsValid && passwordIsValid);
     }, 500);
 
     return () => {
-      console.log("cleanup!");
+      // console.log("cleanup!");
       clearTimeout(idetifier);
     };
     // return runs before sideeffect funtion
@@ -98,7 +101,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emileState.value, passwordState.value);
+    authctx.onLogin(emileState.value, passwordState.value);
   };
 
   return (
