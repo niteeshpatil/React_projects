@@ -2,6 +2,7 @@ import { Fragment, Component } from "react";
 import UsersContext from "../store/users-context";
 import classes from "./UserFinder.module.css";
 import Users from "./Users";
+import ErrorBoundary from "./ErrorBoundary";
 
 // const DUMMY_USERS = [
 //   { id: "u1", name: "Max" },
@@ -43,7 +44,9 @@ class UserFinder extends Component {
       <Fragment>
         <div className={classes.finder}>
           <input type="search" onChange={this.searchChangeHandler.bind(this)} />
-          <Users users={this.state.filteredUsers} />
+          <ErrorBoundary>
+            <Users users={this.state.filteredUsers} />
+          </ErrorBoundary>
         </div>
       </Fragment>
     );
