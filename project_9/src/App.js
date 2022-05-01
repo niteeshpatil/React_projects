@@ -1,27 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import MoviesList from "./components/MoviesList";
+import AddMovie from "./components/AddMovie";
 import "./App.css";
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [isloding, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  async function fetchMovieHandler() {
+  const fetchMovieHandler = useCallback(async () => {
+    setError(null);
     setIsLoading(true);
-    const response = await fetch("https://swapi.dev/api/films/");
-    const data = await response.json();
-    const tMovies = data.results.map((movieData) => {
-      return {
-        id: movieData.episode_id,
-        title: movieData.title,
-        openingText: movieData.opening_crawl,
-        releaseDate: movieData.release_date,
-      };
-    });
-    setMovies(tMovies);
+    try {
+      const response = await fetch(
+        "https://react-http-d7d3d-default-rtdb.firebaseio.com/movies.json"
+      );
+      if (!response.ok) {
+        throw new Error("Somthing went wrong!");
+      }
+      const data = await response.json();
+
+      const loadedMovies = [];
+
+      for (const key in data) {
+        loadedMovies.push({
+          id: key,
+          title: data[key].title,
+          openingText: data[key].openingText,
+          releaseDate: data[key].releaseDate,
+        });
+      }
+
+      // const tMovies = loadedMovies.map((movieData) => {
+      //   return {
+      //     id: movieData.episode_id,
+      //     title: movieData.title,
+      //     openingText: movieData.openingText,
+      //     releaseDate: movieData.releaseDate,
+      //   };
+      // });
+      setMovies(loadedMovies);
+    } catch (error) {
+      setError(error.message);
+    }
     setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchMovieHandler();
+  }, [fetchMovieHandler]);
+
+  async function addMovieHandler(movie) {
+    const response = await fetch(
+      "https://react-http-d7d3d-default-rtdb.firebaseio.com/movies.json",
+      {
+        method: "POST",
+        body: JSON.stringify(movie),
+        headers: {
+          "content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+    //fecth can be used to resend data to store
   }
+
+  // useCallback is mostly used when you don't want a
+  //function to get un-necessarily created each time on every render
+  // and subsequent re-renders of the component.
+
   // const dummyMovies = [
   //   {
   //     id: 1,
@@ -37,16 +86,29 @@ function App() {
   //   },
   // ];
 
+  let content = <p>Found no Movie</p>;
+
+  if (movies.length > 0) {
+    content = <MoviesList movies={movies} />;
+  }
+
+  if (error) {
+    content = <p>{error}</p>;
+  }
+
+  if (isloding) {
+    content = <p>Loading....</p>;
+  }
+
   return (
     <React.Fragment>
       <section>
-        <button onClick={fetchMovieHandler}>Fetch Movies</button>
+        <AddMovie onAddMovie={addMovieHandler} />
       </section>
       <section>
-        {!isloding && movies.length > 0 && <MoviesList movies={movies} />}
-        {!isloding && movies.length === 0 && <p>Found no Movies</p>}
-        {isloding && <p>Loading....</p>}
+        <button onClick={fetchMovieHandler}>Fetch Movies</button>
       </section>
+      <section>{content}</section>
     </React.Fragment>
   );
 }
