@@ -20,10 +20,12 @@ function App() {
       setTasks(loadedTasks);
     };
 
-    fetchTasks({
-      url: "https://react-http2-6f3d4-default-rtdb.firebaseio.com/tasks.json",
-      Tranformtask,
-    });
+    fetchTasks(
+      {
+        url: "https://react-http2-6f3d4-default-rtdb.firebaseio.com/tasks.json",
+      },
+      Tranformtask
+    );
   }, [fetchTasks]);
 
   const taskAddHandler = (task) => {
