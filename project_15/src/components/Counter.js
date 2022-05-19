@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import classes from "./Counter.module.css";
+import { counterActions } from "../store/index";
 
 const Counter = () => {
   const dispatch = useDispatch();
@@ -9,18 +10,33 @@ const Counter = () => {
   //funtion determin which freacher we want to extreact
   // auto changing when
 
+  // const incrementHandler = () => {
+  //   dispatch({ type: "increment" });
+  // };
+  // const derementHandler = () => {
+  //   dispatch({ type: "decrement" });
+  // };
+
+  // const increaseHandler = () => {
+  //   dispatch({ type: "increase", amount: 2 });
+  // };
+  // const toggleCounterHandler = () => {
+  //   dispatch({ type: "toggle" });
+  // };
+
   const incrementHandler = () => {
-    dispatch({ type: "increment" });
+    dispatch(counterActions.increment());
   };
   const derementHandler = () => {
-    dispatch({ type: "decrement" });
+    dispatch(counterActions.decrement());
   };
 
   const increaseHandler = () => {
-    dispatch({ type: "increase", amount: 2 });
+    dispatch(counterActions.increase(2));
+    // {type:some_unique_identifier,paylode:2}
   };
   const toggleCounterHandler = () => {
-    dispatch({ type: "toggle" });
+    dispatch(counterActions.toggle());
   };
 
   return (
