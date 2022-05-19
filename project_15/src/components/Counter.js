@@ -5,6 +5,7 @@ const Counter = () => {
   const dispatch = useDispatch();
   // dispactch an action agenest store
   const counter = useSelector((state) => state.counter);
+  const show = useSelector((state) => state.showCounter);
   //funtion determin which freacher we want to extreact
   // auto changing when
 
@@ -14,14 +15,21 @@ const Counter = () => {
   const derementHandler = () => {
     dispatch({ type: "decrement" });
   };
-  const toggleCounterHandler = () => {};
+
+  const increaseHandler = () => {
+    dispatch({ type: "increase", amount: 2 });
+  };
+  const toggleCounterHandler = () => {
+    dispatch({ type: "toggle" });
+  };
 
   return (
     <main className={classes.counter}>
       <h1>Redux Counter</h1>
-      <div className={classes.value}>{counter}</div>
+      {show && <div className={classes.value}>{counter}</div>}
       <div>
         <button onClick={incrementHandler}>Increment</button>
+        <button onClick={increaseHandler}>Increase By 2</button>
         <button onClick={derementHandler}>Decrement</button>
       </div>
       <button onClick={toggleCounterHandler}>Toggle Counter</button>
