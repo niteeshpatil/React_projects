@@ -5,8 +5,8 @@ import { counterActions } from "../store/index";
 const Counter = () => {
   const dispatch = useDispatch();
   // dispactch an action agenest store
-  const counter = useSelector((state) => state.counter);
-  const show = useSelector((state) => state.showCounter);
+  const counter = useSelector((state) => state.counter.counter);
+  const show = useSelector((state) => state.counter.showCounter);
   //funtion determin which freacher we want to extreact
   // auto changing when
 

@@ -4,11 +4,11 @@ import { createSlice, configureStore } from "@reduxjs/toolkit";
 
 // never manipulate existing state but overwrite with new state
 
-const initialState = { counter: 0, showCounter: true };
+const initialCounterState = { counter: 0, showCounter: true };
 
-const createdSlice = createSlice({
+const counterSlice = createSlice({
   name: "counter",
-  initialState,
+  initialState: initialCounterState,
   reducers: {
     increment(state) {
       state.counter++;
@@ -28,43 +28,64 @@ const createdSlice = createSlice({
   // reducres is object map
 });
 
-const CounterReducer = (state = initialState, action) => {
-  if (action.type === "increment") {
-    return {
-      counter: state.counter + 1,
-      showCounter: state.showCounter,
-    };
-  }
-
-  if (action.type === "increase") {
-    return {
-      counter: state.counter + action.amount,
-      showCounter: state.showCounter,
-    };
-  }
-
-  if (action.type === "decrement") {
-    return {
-      counter: state.counter - 1,
-      showCounter: state.showCounter,
-    };
-  }
-
-  if (action.type === "toggle") {
-    return {
-      counter: state.counter,
-      showCounter: !state.showCounter,
-    };
-  }
-
-  return state;
+const initialAuthState = {
+  isAuthenticated: false,
 };
 
-// const store = createStore(CounterReducer);
-const store = configureStore({
-  reducer: createdSlice.reducer,
+const authSlice = createSlice({
+  name: "authentication",
+  initialState: initialAuthState,
+  reducers: {
+    login(state) {
+      state.isAuthenticated = true;
+    },
+    logout(state) {
+      state.isAuthenticated = false;
+    },
+  },
 });
 
-export const counterActions = createdSlice.actions;
+// const CounterReducer = (state = initialState, action) => {
+//   if (action.type === "increment") {
+//     return {
+//       counter: state.counter + 1,
+//       showCounter: state.showCounter,
+//     };
+//   }
+
+//   if (action.type === "increase") {
+//     return {
+//       counter: state.counter + action.amount,
+//       showCounter: state.showCounter,
+//     };
+//   }
+
+//   if (action.type === "decrement") {
+//     return {
+//       counter: state.counter - 1,
+//       showCounter: state.showCounter,
+//     };
+//   }
+
+//   if (action.type === "toggle") {
+//     return {
+//       counter: state.counter,
+//       showCounter: !state.showCounter,
+//     };
+//   }
+
+//   return state;
+// };
+
+// const store = createStore(CounterReducer);
+
+const store = configureStore({
+  // reducer: counterSlice.reducer,
+  reducer: { counter: counterSlice.reducer, auth: authSlice.reducer },
+  // this two reducers are combined to form one resucer
+});
+
+export const counterActions = counterSlice.actions;
+export const authActions = authSlice.actions;
 
 export default store;
