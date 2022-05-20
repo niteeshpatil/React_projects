@@ -14,7 +14,7 @@ const cartSlice = createSlice({
       const existingItem = state.items.find((item) => item.id === newItem.id);
       state.totalQuantity++;
       if (!existingItem) {
-        // pushhing to existinf state.items and existingItem.quantity++ 
+        // pushhing to existinf state.items and existingItem.quantity++
         //is fine this not for
         //not for wihtout createSlice,for that new state is created with
         //pread oprations and assine new values
@@ -38,6 +38,7 @@ const cartSlice = createSlice({
         state.items = state.items.filter((item) => item.id !== id);
       } else {
         existingItem.quantity--;
+        existingItem.totalPrice = existingItem.totalPrice - existingItem.price;
       }
     },
   },
