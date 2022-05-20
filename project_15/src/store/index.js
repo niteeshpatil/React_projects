@@ -1,49 +1,10 @@
 // import { createStore } from "redux";
 // configureStore is same as createStore but marging multipale reducers in one reduser
-import { createSlice, configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./auth-slice";
+import CounterReducer from "./counter-slice";
 
 // never manipulate existing state but overwrite with new state
-
-const initialCounterState = { counter: 0, showCounter: true };
-
-const counterSlice = createSlice({
-  name: "counter",
-  initialState: initialCounterState,
-  reducers: {
-    increment(state) {
-      state.counter++;
-      // @reduxjs/toolkit will create new object for thise updated state
-      // but this sholud not be done normal metheads
-    },
-    increase(state, action) {
-      state.counter = state.counter + action.payload;
-    },
-    decrement(state) {
-      state.counter--;
-    },
-    toggle(state) {
-      state.showCounter = !state.showCounter;
-    },
-  },
-  // reducres is object map
-});
-
-const initialAuthState = {
-  isAuthenticated: false,
-};
-
-const authSlice = createSlice({
-  name: "authentication",
-  initialState: initialAuthState,
-  reducers: {
-    login(state) {
-      state.isAuthenticated = true;
-    },
-    logout(state) {
-      state.isAuthenticated = false;
-    },
-  },
-});
 
 // const CounterReducer = (state = initialState, action) => {
 //   if (action.type === "increment") {
@@ -81,11 +42,8 @@ const authSlice = createSlice({
 
 const store = configureStore({
   // reducer: counterSlice.reducer,
-  reducer: { counter: counterSlice.reducer, auth: authSlice.reducer },
+  reducer: { counter: CounterReducer, auth: authReducer },
   // this two reducers are combined to form one resucer
 });
-
-export const counterActions = counterSlice.actions;
-export const authActions = authSlice.actions;
 
 export default store;
