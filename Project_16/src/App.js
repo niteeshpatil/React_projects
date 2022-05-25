@@ -44,3 +44,4 @@ function App() {
 }
 
 export default App;
+// app funtionaly is varifed using redux dev too extention in brower
