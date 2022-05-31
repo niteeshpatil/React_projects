@@ -1,9 +1,9 @@
-import QuoteForm from "../components/quotes/QuoteForm";
+import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
+
+import QuoteForm from "../components/quotes/QuoteForm";
 import useHttp from "../hooks/use-http";
 import { addQuote } from "../lib/api";
-import { useEffect } from "react";
-// The useHistory hook gives you access to the history instance that you may use to navigate. ...
 
 const NewQuote = () => {
   const { sendRequest, status } = useHttp(addQuote);
@@ -17,11 +17,10 @@ const NewQuote = () => {
 
   const addQuoteHandler = (quoteData) => {
     sendRequest(quoteData);
-    history.push("/quotes");
   };
 
   return (
-    <QuoteForm isLoading={(status === "pending")} onAddQuote={addQuoteHandler} />
+    <QuoteForm isLoading={status === "pending"} onAddQuote={addQuoteHandler} />
   );
 };
 
