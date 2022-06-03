@@ -1,10 +1,13 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
+import AuthContext from "../../store/auth-context";
 
 import classes from "./AuthForm.module.css";
 
 const AuthForm = () => {
-  const emialInputRef = useRef();
+  const emailInputRef = useRef();
   const passwordInputRef = useRef();
+  const authCtx = useContext(AuthContext);
+
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -14,38 +17,53 @@ const AuthForm = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    const enterdEmail = emialInputRef.current.value;
-    const enterdPassword = passwordInputRef.current.value;
+
+    const enteredEmail = emailInputRef.current.value;
+    const enteredPassword = passwordInputRef.current.value;
+
+    // optional: Add validation
+
     setIsLoading(true);
+    let url;
     if (isLogin) {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDkQZ3ZaXVLmfOMBc7affkhGNxy8pFMu7U";
     } else {
-      fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDkQZ3ZaXVLmfOMBc7affkhGNxy8pFMu7U",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: enterdEmail,
-            password: enterdPassword,
-            returnSecureToken: true,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      ).then((res) => {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDkQZ3ZaXVLmfOMBc7affkhGNxy8pFMu7U";
+    }
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        email: enteredEmail,
+        password: enteredPassword,
+        returnSecureToken: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
         setIsLoading(false);
         if (res.ok) {
+          return res.json();
         } else {
-          res.json().then((data) => {
+          return res.json().then((data) => {
             let errorMessage = "Authentication failed!";
             if (data && data.error && data.error.message) {
               errorMessage = data.error.message;
             }
-            alert(errorMessage);
+
+            throw new Error(errorMessage);
           });
         }
+      })
+      .then((data) => {
+        authCtx.login(data.idToken);
+      })
+      .catch((err) => {
+        alert(err.message);
       });
-    }
   };
 
   return (
@@ -54,7 +72,7 @@ const AuthForm = () => {
       <form onSubmit={submitHandler}>
         <div className={classes.control}>
           <label htmlFor="email">Your Email</label>
-          <input type="email" id="email" required ref={emialInputRef} />
+          <input type="email" id="email" required ref={emailInputRef} />
         </div>
         <div className={classes.control}>
           <label htmlFor="password">Your Password</label>
