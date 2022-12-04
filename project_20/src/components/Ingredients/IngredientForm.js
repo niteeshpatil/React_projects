@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import Card from "../UI/Card";
 import "./IngredientForm.css";
@@ -13,7 +13,9 @@ const IngredientForm = React.memo((props) => {
     props.onAddIngredint({ title: title, amount: amount });
   };
 
-  const changetitle = (e) => {
+  console.log("Form recreting!");
+
+  const changetitle = useCallback((e) => {
     const newvalue = e.target.value;
     // setinputstate((previnstate) => ({
     //   title: newvalue,
@@ -21,9 +23,9 @@ const IngredientForm = React.memo((props) => {
     // }));
     settitle(newvalue);
     // console.log(title);
-  };
+  }, []);
 
-  const changeamount = (e) => {
+  const changeamount = useCallback((e) => {
     const newvalue = e.target.value;
     // setinputstate((previnstate) => ({
     //   title: previnstate.title,
@@ -31,7 +33,7 @@ const IngredientForm = React.memo((props) => {
     // }));
     setamount(newvalue);
     // console.log(amount);
-  };
+  }, []);
 
   return (
     <section className="ingredient-form">

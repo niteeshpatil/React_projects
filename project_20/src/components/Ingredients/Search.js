@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-
 import Card from "../UI/Card";
 import "./Search.css";
 import LoadingIndicator from "../UI/LoadingIndicator";
